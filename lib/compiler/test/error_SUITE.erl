@@ -193,13 +193,21 @@ warnings_as_errors(Config) when is_list(Config) ->
           {error,
            [],
            [{3,erl_lint,{unused_var,'A'}}]} }],
-    ?line [] = run(Config, Ts),
+    ?line TestFile = test_filename(Config),
+    ?line [] = run(Ts, TestFile, write_beam),
+
+    BeamFile = filename:rootname(TestFile, ".erl") ++ ".beam",
+    false = filelib:is_regular(BeamFile),
     ok.
 
 
 run(Config, Tests) ->
+    ?line File = test_filename(Config),
+    run(Tests, File, dont_write_beam).
+
+run(Tests, File, WriteBeam) ->
     F = fun({N,P,Ws,E}, BadL) ->
-                case catch run_test(Config, P, Ws) of
+                case catch run_test(P, File, Ws, WriteBeam) of
                     E -> 
                         BadL;
                     Bad -> 
@@ -211,8 +219,12 @@ run(Config, Tests) ->
     lists:foldl(F, [], Tests).
 
 run2(Config, Tests) ->
+    ?line File = test_filename(Config),
+    run2(Tests, File, dont_write_beam).
+
+run2(Tests, File, WriteBeam) ->
     F = fun({N,P,Ws,E}, BadL) ->
-                case catch filter(run_test(Config, P, Ws)) of
+                case catch filter(run_test(P, File, Ws, WriteBeam)) of
                     E ->
                         BadL;
                     Bad ->
@@ -231,12 +243,19 @@ filter(X) ->
 
 %% Compiles a test module and returns the list of errors and warnings.
 
-run_test(Conf, Test0, Warnings) ->
-    Filename = 'errors_test.erl',
-    ?line DataDir = ?config(priv_dir, Conf),
+test_filename(Conf) ->
+    Filename = "errors_test.erl",
+    DataDir = ?config(priv_dir, Conf),
+    filename:join(DataDir, Filename).
+
+run_test(Test0, File, Warnings, WriteBeam) ->
     ?line Test = ["-module(errors_test). ", Test0],
-    ?line File = filename:join(DataDir, Filename),
-    ?line Opts = [binary,return_errors|Warnings],
+    ?line Opts = case WriteBeam of
+		     dont_write_beam ->
+			 [binary,return_errors|Warnings];
+		     write_beam ->
+			 [return_errors|Warnings]
+		 end,
     ?line ok = file:write_file(File, Test),
 
     %% Compile once just to print all errors and warnings.

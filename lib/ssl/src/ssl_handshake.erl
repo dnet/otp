@@ -383,7 +383,7 @@ master_secret(Version, #session{master_secret = Mastersecret},
 		      ConnectionStates, Role)
     catch
 	exit:Reason ->
-	    error_logger:error_report("Key calculation failed due to ~p",
+	    error_logger:error_msg("Key calculation failed due to ~p",
 				      [Reason]),
 	    ?ALERT_REC(?FATAL, ?HANDSHAKE_FAILURE)
     end;
@@ -400,7 +400,7 @@ master_secret(Version, PremasterSecret, ConnectionStates, Role) ->
 		      SecParams, ConnectionStates, Role) 
     catch
 	exit:Reason ->
-	    error_logger:error_report("Master secret calculation failed"
+	    error_logger:error_msg("Master secret calculation failed"
 				      " due to ~p", [Reason]),
 	    ?ALERT_REC(?FATAL, ?HANDSHAKE_FAILURE)
     end.

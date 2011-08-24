@@ -47,7 +47,7 @@ report(Reason, MFA) ->
     info_report(Reason, MFA).
 
 info_report(Reason, {M,F,A}) ->
-    error_logger:info_report("   Reason: ~p~n"
+    error_logger:info_msg("   Reason: ~p~n"
 			     "      Pid: ~p~n"
 			     "     Node: ~p~n"
 			     "   Module: ~p~n"

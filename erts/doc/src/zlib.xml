@@ -456,30 +456,30 @@ Crc = lists:foldl(fun(Bin,Crc0) ->
     </func>
     <func>
       <name name="zip" arity="1"/>
-      <fsummary>Compress a binary without the zlib headers</fsummary>
+      <fsummary>Compress data without the zlib headers</fsummary>
       <desc>
-        <p>Compress a binary (without zlib headers and checksum).</p>
+        <p>Compress data (without zlib headers and checksum).</p>
       </desc>
     </func>
     <func>
       <name name="unzip" arity="1"/>
-      <fsummary>Uncompress a binary without the zlib headers</fsummary>
+      <fsummary>Uncompress data without the zlib headers</fsummary>
       <desc>
-        <p>Uncompress a binary (without zlib headers and checksum).</p>
+        <p>Uncompress data (without zlib headers and checksum).</p>
       </desc>
     </func>
     <func>
       <name name="gzip" arity="1"/>
-      <fsummary>Compress a binary with gz header</fsummary>
+      <fsummary>Compress data with gz header</fsummary>
       <desc>
-        <p>Compress a binary (with gz headers and checksum).</p>
+        <p>Compress data (with gz headers and checksum).</p>
       </desc>
     </func>
     <func>
       <name name="gunzip" arity="1"/>
-      <fsummary>Uncompress a binary with gz header</fsummary>
+      <fsummary>Uncompress data with gz header</fsummary>
       <desc>
-        <p>Uncompress a binary (with gz headers and checksum).</p>
+        <p>Uncompress data (with gz headers and checksum).</p>
       </desc>
     </func>
   </funcs>

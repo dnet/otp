@@ -371,27 +371,29 @@ uncompress(Binary) when is_binary(Binary) -> erlang:error(data_error);
 uncompress(_) -> erlang:error(badarg).
 
 %% unzip/zip zlib without header (zip members)
--spec zip(Binary) -> Compressed when
-      Binary :: binary(),
+-spec zip(Data) -> Compressed when
+      Data :: iodata(),
       Compressed :: binary().
-zip(Binary) ->
+zip(Data) when is_binary(Data); is_list(Data) ->
     Z = open(),
     deflateInit(Z, default, deflated, -?MAX_WBITS, 8, default),
-    Bs = deflate(Z, Binary, finish),
+    Bs = deflate(Z, Data, finish),
     deflateEnd(Z),
     close(Z),
-    list_to_binary(Bs).
+    list_to_binary(Bs);
+zip(_) -> erlang:error(badarg).
 
--spec unzip(Binary) -> Decompressed when
-      Binary :: binary(),
+-spec unzip(Data) -> Decompressed when
+      Data :: iodata(),
       Decompressed :: binary().
-unzip(Binary) ->
+unzip(Data) when is_binary(Data); is_list(Data) ->
     Z = open(),
     inflateInit(Z, -?MAX_WBITS),
-    Bs = inflate(Z, Binary),
+    Bs = inflate(Z, Data),
     inflateEnd(Z),
     close(Z),
-    list_to_binary(Bs).
+    list_to_binary(Bs);
+unzip(_) -> erlang:error(badarg).
     
 -spec gzip(Data) -> Compressed when
       Data :: iodata(),
@@ -405,8 +407,8 @@ gzip(Data) when is_binary(Data); is_list(Data) ->
     iolist_to_binary(Bs);
 gzip(_) -> erlang:error(badarg).
 
--spec gunzip(Binary) -> Decompressed when
-      Binary :: binary(),
+-spec gunzip(Data) -> Decompressed when
+      Data :: iodata(),
       Decompressed :: binary().
 gunzip(Data) when is_binary(Data); is_list(Data) ->
     Z = open(),

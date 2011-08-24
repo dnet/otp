@@ -60,7 +60,7 @@ close(S) ->
       Socket :: socket(),
       Address :: ip_address() | hostname(),
       Port :: port_number(),
-      Packet :: string() | binary(),
+      Packet :: iodata(),
       Reason :: not_owner | posix().
 
 send(S, Address, Port, Packet) when is_port(S) ->
